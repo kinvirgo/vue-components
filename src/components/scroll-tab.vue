@@ -1,5 +1,6 @@
 <template>
     <div class="scroll-tab">
+        <!-- tabs -->
         <div class="scroll-tab__wrapper" ref="wrapperRef">
             <div
                 class="scroll-tab__wrapper--box"
@@ -20,6 +21,7 @@
                 </template>
             </div>
         </div>
+        <!-- control -->
         <div class="scroll-tab__control">
             <button
                 class="scroll-tab__control--left"
@@ -114,6 +116,7 @@
                 let { align } = props
                 /* 更新滚动对齐 */
                 scrollIntoView(selectIndex, align)
+                /* 更新 */
             }
 
             function scrollIntoView(
@@ -152,7 +155,6 @@
                     left,
                     behavior: 'smooth',
                 })
-                console.log(left)
             }
 
             function doChange(

@@ -1,6 +1,6 @@
 <template>
     <div class="tab-wrapper">
-        <scroll-tab :columns="tabs" />
+        <scroll-tab :columns="tabs" v-model="selectIndex" />
     </div>
 </template>
 <script lang="ts">
@@ -12,11 +12,13 @@
         },
         setup(props, context) {
             const state = reactive({
-                tabs: Array(20)
+                tabs: Array(100)
                     .fill(0)
                     .map((item, index) => ({
                         name: index + 1,
                     })),
+                /* 选择中 */
+                selectIndex: 0,
             })
 
             return {
