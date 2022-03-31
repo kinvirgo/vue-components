@@ -5,7 +5,9 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "prepare": "husky install",
+    "prettier": "prettier --write ."
   },
   "dependencies": {
     "vue": "^3.2.25"
@@ -14,6 +16,9 @@
     "@vitejs/plugin-vue": "^2.3.0",
     "typescript": "^4.5.4",
     "vite": "^2.9.0",
-    "vue-tsc": "^0.29.8"
+    "vue-tsc": "^0.29.8",
+    "husky": "^7.0.4",
+    "lint-staged": "^12.0.1",
+    "prettier": "^2.4.1"
   }
 }

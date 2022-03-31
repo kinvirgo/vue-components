@@ -1,0 +1,5 @@
+# js文件
+'fmt/**/*.{js,vue}': ['prettier --write', 'git add']
+
+# 忽略文件
+# 'ignore': ['**/dist/*']
