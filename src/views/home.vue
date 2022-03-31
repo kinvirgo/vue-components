@@ -1,6 +1,6 @@
 <template>
     <div class="tab-wrapper">
-        <scroll-tab />
+        <scroll-tab :columns="tabs" />
     </div>
 </template>
 <script lang="ts">
@@ -12,15 +12,11 @@
         },
         setup(props, context) {
             const state = reactive({
-                columns: [
-                    { name: '1' },
-                    { name: '2' },
-                    { name: '3' },
-                    { name: '4' },
-                    { name: '5' },
-                    { name: '6' },
-                    { name: '7' },
-                ],
+                tabs: Array(20)
+                    .fill(0)
+                    .map((item, index) => ({
+                        name: index + 1,
+                    })),
             })
 
             return {

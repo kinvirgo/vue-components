@@ -5,11 +5,19 @@
                 class="scroll-tab__wrapper--box"
                 ref="boxRef"
                 :style="transform">
-                <div class="tab-item">1</div>
-                <div class="tab-item">2</div>
-                <div class="tab-item">3</div>
-                <div class="tab-item">4</div>
-                <div class="tab-item">5</div>
+                <template
+                    v-for="(item, index) in columns"
+                    :key="index">
+                    <div
+                        :class="[
+                            'tab-item',
+                            { on: selectIndex === index },
+                        ]"
+                        :id="selectIndexToTabId(index)"
+                        @click="doChange(index, item)">
+                        tab {{ item.name }}
+                    </div>
+                </template>
             </div>
         </div>
         <div class="scroll-tab__control">
@@ -33,8 +41,39 @@
 </template>
 <script lang="ts">
     import { computed } from '@vue/reactivity'
-    import { defineComponent, reactive, toRefs } from 'vue'
+    import {
+        defineComponent,
+        onMounted,
+        PropType,
+        reactive,
+        toRefs,
+    } from 'vue'
+
+    interface TabColumn {
+        name: string
+        [key: string]: any
+    }
+
+    type TabAlign = 'center' | 'left'
+
     export default defineComponent({
+        props: {
+            /* tab列表 */
+            columns: {
+                type: Array as PropType<Array<TabColumn>>,
+                default: () => [],
+            },
+            /* 选择 */
+            selectIndex: {
+                type: Number,
+                default: 0,
+            },
+            /* 对齐方式 */
+            align: {
+                type: String as PropType<TabAlign>,
+                default: 'center',
+            },
+        },
         setup(props, context) {
             const state = reactive({
                 wrapperRef: null,
@@ -44,6 +83,7 @@
                 timingFunction: 'ease-in-out',
             })
 
+            // computed
             const transform = computed(() => {
                 let {
                     duration,
@@ -56,9 +96,77 @@
                     '-webkit-transform': `translate3d(${translateX}px, 0, 0)`,
                     'transition': duration
                         ? `transform ${duration}ms ${timingFunction}`
-                        : null,
+                        : '',
                 }
             })
+
+            onMounted(() => {
+                init()
+            })
+
+            function init() {
+                let { columns, selectIndex } = props
+                columns[selectIndex] &&
+                    setSelectTab(selectIndex)
+            }
+
+            function setSelectTab(selectIndex: number) {
+                let { align } = props
+                /* 更新滚动对齐 */
+                scrollIntoView(selectIndex, align)
+            }
+
+            function scrollIntoView(
+                selectIndex: number,
+                align: TabAlign,
+            ) {
+                let { wrapperRef, boxRef } = state,
+                    { width: tabWidth } = (
+                        wrapperRef as unknown as HTMLElement
+                    ).getBoundingClientRect(),
+                    { width: boxWidth, left: boxLeft } = (
+                        boxRef as unknown as HTMLElement
+                    ).getBoundingClientRect(),
+                    { width: itemWidth, left: itemLeft } =
+                        document
+                            .getElementById(
+                                selectIndexToTabId(
+                                    selectIndex,
+                                ),
+                            )!
+                            .getBoundingClientRect(),
+                    itemRelativeLeft = itemLeft - boxLeft,
+                    left = 0
+                /* 滑动条件 */
+                if (boxWidth > tabWidth) {
+                    left =
+                        align === 'center'
+                            ? itemRelativeLeft -
+                              (tabWidth - itemWidth) / 2
+                            : itemRelativeLeft
+                }
+                /* 更新滚动 */
+                ;(
+                    wrapperRef as unknown as HTMLElement
+                ).scroll({
+                    left,
+                    behavior: 'smooth',
+                })
+                console.log(left)
+            }
+
+            function doChange(
+                index: number,
+                item?: TabColumn,
+            ) {
+                setSelectTab(index)
+            }
+
+            function selectIndexToTabId(
+                selectIndex: number,
+            ) {
+                return `t_i_${selectIndex}`
+            }
 
             function doLeft() {}
             function doRight() {}
@@ -73,6 +181,8 @@
                 doLeft,
                 doRight,
                 doSet,
+                doChange,
+                selectIndexToTabId,
             }
         },
     })
@@ -88,6 +198,7 @@
             overflow: hidden;
 
             &--box {
+                display: inline-block;
                 min-width: 100%;
                 background-color: red;
                 white-space: nowrap;
@@ -96,9 +207,25 @@
                     display: inline-block;
                     width: 120px;
                     height: 44px;
-                    background-color: blue;
+                    background-color: #1212cf;
                     vertical-align: middle;
                     color: #fff;
+
+                    text-align: center;
+                    line-height: 44px;
+                    opacity: 0.9;
+                    position: relative;
+                    z-index: 1;
+                    transition: all 0.25s ease-in-out;
+
+                    &:hover,
+                    &.on {
+                        opacity: 1;
+                        cursor: pointer;
+                        box-shadow: 0 0 10px
+                            rgba(255, 255, 255, 0.9);
+                        z-index: 2;
+                    }
                 }
             }
         }
