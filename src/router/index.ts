@@ -4,16 +4,15 @@ import {
 } from 'vue-router'
 import type { RouteRecordRaw } from 'vue-router'
 
-function getComponent(path : string){
-  // return ()=>import("@/")
+function getComponent(path: string) {
+  return () => import(`../views/${path}.vue`)
 }
 
-
 const routes: Array<RouteRecordRaw> = [
-  // {
-  //   path: '/',
-  //   // component :
-  // },
+  {
+    path: '/',
+    component: getComponent('home'),
+  },
 ]
 
 export default createRouter({
