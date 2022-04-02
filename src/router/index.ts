@@ -13,6 +13,10 @@ const routes: Array<RouteRecordRaw> = [
     path: '/',
     component: getComponent('home'),
   },
+  {
+    path: '/alpha',
+    component: getComponent('alpha'),
+  },
 ]
 
 export default createRouter({

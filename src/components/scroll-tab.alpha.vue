@@ -32,11 +32,30 @@
             <div class="tab__control--btn btn-right">▶</div>
             <div class="tab__control--btn btn-set">⚙</div>
         </section>
+        <section class="tab__tips"></section>
     </section>
 </template>
 <script lang="ts">
-    import { defineComponent } from 'vue'
+    interface TabColumn {
+        name: string
+        [key: string]: any
+    }
+
+    import { defineComponent, PropType } from 'vue'
     export default defineComponent({
+        props: {
+            /* tab列表 */
+            columns: {
+                type: Array as PropType<TabColumn[]>,
+                default: () => [],
+            },
+            /* 选中的值 */
+            modelValue: {
+                type: Number,
+                default: 0,
+            },
+        },
+
         setup(props, context) {
             return {}
         },
