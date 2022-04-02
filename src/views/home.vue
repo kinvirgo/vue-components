@@ -1,6 +1,9 @@
 <template>
     <div class="tab-wrapper">
-        <scroll-tab
+        <!-- <scroll-tab
+            :columns="tabs"
+            v-model:select-index="selectIndex" /> -->
+        <scroll-tab-alpha
             :columns="tabs"
             v-model:select-index="selectIndex" />
     </div>
