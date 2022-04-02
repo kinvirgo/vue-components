@@ -1,6 +1,6 @@
 <template>
     <section class="vui-tabs__container">
-        <div class="tabs__container--wraper">
+        <div class="vui-tabs__container--wraper">
             <slot></slot>
         </div>
     </section>
@@ -21,6 +21,7 @@
 
             &--wraper {
                 display: inline-block;
+                white-space: nowrap;
             }
         }
     }

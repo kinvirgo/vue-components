@@ -1,5 +1,5 @@
 <template>
-    <div class="tab__control--btn btn-left">⚙</div>
+    <div class="tab__control--btn btn-left">◀</div>
 </template>
 <script lang="ts">
     import { defineComponent } from 'vue'
@@ -20,8 +20,7 @@
             justify-content: center;
             align-items: center;
 
-            font-size: 16px;
-            font-weight: bold;
+            font-size: 14px;
             color: #6e6e6e;
             cursor: pointer;
             opacity: 1;

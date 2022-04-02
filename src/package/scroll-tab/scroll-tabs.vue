@@ -13,6 +13,8 @@
 </script>
 <style lang="scss">
     .vui-tabs {
+        --tab-height: 40px;
+
         display: flex;
         align-items: center;
         justify-content: space-between;

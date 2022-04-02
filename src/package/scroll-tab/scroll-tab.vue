@@ -1,6 +1,6 @@
 <template>
     <div class="vui-tab">
-        <div class="tab__tatus">●</div>
+        <div class="tab__status">●</div>
         <div class="tab__name">
             <slot></slot>
         </div>
