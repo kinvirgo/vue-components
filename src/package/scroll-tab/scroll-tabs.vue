@@ -4,9 +4,24 @@
     </section>
 </template>
 <script lang="ts">
-    import { defineComponent } from 'vue'
+    import { defineComponent, provide, computed } from 'vue'
+    import { TABS_KEY } from './share'
     export default defineComponent({
+        props: {
+            modelvalue: {
+                type: Number,
+                default: 0,
+            },
+        },
         setup(props, context) {
+            // 通过computed传递子组件
+            provide(
+                TABS_KEY,
+                computed(() => {
+                    return props.modelvalue
+                }),
+            )
+
             return {}
         },
     })
