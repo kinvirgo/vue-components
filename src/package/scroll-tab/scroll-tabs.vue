@@ -4,38 +4,25 @@
     </section>
 </template>
 <script lang="ts">
-    import { computed } from '@vue/reactivity'
-    import {
-        defineComponent,
-        provide,
-        ref,
-        watch,
-    } from 'vue'
+    import { defineComponent, provide, computed } from 'vue'
+    import { TABS_KEY } from './share'
     export default defineComponent({
         props: {
-            active: {
+            modelvalue: {
                 type: Number,
-                default: -1,
+                default: 0,
             },
         },
         setup(props, context) {
-            const currentActive = ref(props.active)
-
-            watch(
-                () => props.active,
-                val => {
-                    console.log('>>>', val)
-                    currentActive.value = val
-                },
+            // 通过computed传递子组件
+            provide(
+                TABS_KEY,
+                computed(() => {
+                    return props.modelvalue
+                }),
             )
 
-            const select = computed(() => {
-                return currentActive.value
-            })
-
-            provide('select', select)
-
-            return { currentActive }
+            return {}
         },
     })
 </script>

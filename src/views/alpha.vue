@@ -1,22 +1,13 @@
 <template>
     <div class="tab-wrapper">
-        <scroll-tabs v-model:active="selectIndex">
+        <scroll-tabs v-model="selectIndex">
             <scroll-tabs-group>
-                <scroll-tab :index="1"
-                    >首页-测试</scroll-tab
-                >
-                <scroll-tab>首页-测试</scroll-tab>
                 <scroll-tab
-                    >首页-测试这个菜单名称很长</scroll-tab
+                    v-for="(tab, index) in tabs"
+                    :key="index"
+                    :index="index"
+                    >菜单-{{ tab.name }}</scroll-tab
                 >
-                <scroll-tab>首页-测试</scroll-tab>
-                <scroll-tab>首页-测试</scroll-tab>
-                <scroll-tab>首页-测试</scroll-tab>
-                <scroll-tab>首页-测试</scroll-tab>
-                <scroll-tab>首页-测试</scroll-tab>
-                <scroll-tab>首页-测试</scroll-tab>
-                <scroll-tab>首页-测试</scroll-tab>
-                <scroll-tab>首页-测试</scroll-tab>
             </scroll-tabs-group>
             <scroll-control-left />
             <scroll-control-right />
@@ -44,7 +35,13 @@
         },
         setup(props, context) {
             const state = reactive({
-                selectIndex: 1,
+                tabs: Array(100)
+                    .fill(0)
+                    .map((item, index) => ({
+                        name: index + 1,
+                    })),
+                /* 选择中 */
+                selectIndex: 0,
             })
 
             return {
