@@ -4,10 +4,38 @@
     </section>
 </template>
 <script lang="ts">
-    import { defineComponent } from 'vue'
+    import { computed } from '@vue/reactivity'
+    import {
+        defineComponent,
+        provide,
+        ref,
+        watch,
+    } from 'vue'
     export default defineComponent({
+        props: {
+            active: {
+                type: Number,
+                default: -1,
+            },
+        },
         setup(props, context) {
-            return {}
+            const currentActive = ref(props.active)
+
+            watch(
+                () => props.active,
+                val => {
+                    console.log('>>>', val)
+                    currentActive.value = val
+                },
+            )
+
+            const select = computed(() => {
+                return currentActive.value
+            })
+
+            provide('select', select)
+
+            return { currentActive }
         },
     })
 </script>

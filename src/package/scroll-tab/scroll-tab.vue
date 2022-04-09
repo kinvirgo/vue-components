@@ -1,5 +1,5 @@
 <template>
-    <div class="vui-tab">
+    <div class="vui-tab" :class="{ active: isActive }">
         <div class="tab__status">●</div>
         <div class="tab__name">
             <slot></slot>
@@ -8,10 +8,32 @@
     </div>
 </template>
 <script lang="ts">
-    import { defineComponent } from 'vue'
+    import { computed } from '@vue/reactivity'
+    import {
+        ComputedRef,
+        defineComponent,
+        inject,
+    } from 'vue'
     export default defineComponent({
+        props: {
+            index: {
+                type: Number,
+                default: null,
+            },
+        },
         setup(props, context) {
-            return {}
+            const select =
+                inject<ComputedRef<number>>('select')
+
+            const isActive = computed(() => {
+                console.log('>>>', select?.value)
+
+                return select?.value === props.index
+            })
+
+            return {
+                isActive,
+            }
         },
     })
 </script>

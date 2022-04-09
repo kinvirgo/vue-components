@@ -1,8 +1,10 @@
 <template>
     <div class="tab-wrapper">
-        <scroll-tabs>
+        <scroll-tabs v-model:active="selectIndex">
             <scroll-tabs-group>
-                <scroll-tab>首页-测试</scroll-tab>
+                <scroll-tab :index="1"
+                    >首页-测试</scroll-tab
+                >
                 <scroll-tab>首页-测试</scroll-tab>
                 <scroll-tab
                     >首页-测试这个菜单名称很长</scroll-tab
@@ -30,7 +32,7 @@
     import ScrollControlRight from '@/package/scroll-tab/scroll-control-right.vue'
     import ScrollControlSet from '@/package/scroll-tab/scroll-control-set.vue'
 
-    import { defineComponent } from 'vue'
+    import { defineComponent, reactive, toRefs } from 'vue'
     export default defineComponent({
         components: {
             ScrollTabs,
@@ -41,7 +43,13 @@
             ScrollControlSet,
         },
         setup(props, context) {
-            return {}
+            const state = reactive({
+                selectIndex: 1,
+            })
+
+            return {
+                ...toRefs(state),
+            }
         },
     })
 </script>
