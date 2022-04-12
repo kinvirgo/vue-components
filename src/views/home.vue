@@ -4,7 +4,7 @@
             :columns="tabs"
             v-model:select-index="selectIndex" /> -->
         <scroll-tab-alpha
-            :columns="tabs"
+            v-model:columns="tabs"
             v-model:select-index="selectIndex" />
     </div>
     <div class="tab-wrapper__action">
@@ -26,7 +26,7 @@
                 tabs: Array(100)
                     .fill(0)
                     .map((item, index) => ({
-                        name: index + 1,
+                        name: 'tab-' + index,
                     })),
                 /* 选择中 */
                 selectIndex: 0,

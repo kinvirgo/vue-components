@@ -1,6 +1,7 @@
 <template>
     <div class="tab-wrapper">
         <scroll-tabs v-model="selectIndex">
+            <scroll-control-left />
             <scroll-tabs-group>
                 <scroll-tab
                     v-for="(tab, index) in tabs"
@@ -9,7 +10,6 @@
                     >菜单-{{ tab.name }}</scroll-tab
                 >
             </scroll-tabs-group>
-            <scroll-control-left />
             <scroll-control-right />
             <scroll-control-set />
         </scroll-tabs>
