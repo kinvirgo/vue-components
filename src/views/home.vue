@@ -23,7 +23,7 @@
         },
         setup(props, context) {
             const state = reactive({
-                tabs: Array(100)
+                tabs: Array(1)
                     .fill(0)
                     .map((item, index) => ({
                         name: 'tab-' + index,

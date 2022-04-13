@@ -97,6 +97,7 @@ on-close
 
         /* tab容器 */
         &__container {
+            flex: 1;
             display: flex;
             overflow: hidden;
 
@@ -104,10 +105,8 @@ on-close
                 height: 40px;
                 display: inline-flex;
                 align-items: center;
-
                 min-width: 160px;
                 max-width: 200px;
-
                 padding: 0 12px;
                 border-right: 1px solid #cccccc;
 
