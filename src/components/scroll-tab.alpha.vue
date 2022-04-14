@@ -1,13 +1,17 @@
 <template>
-    <section class="vui-tabs">
-        <section class="vui-tabs__container">
+    <section :class="['vui-tabs', mode]">
+        <section
+            class="vui-tabs__container"
+            ref="containerRef">
             <template v-for="(item, index) in columns">
                 <div
                     :class="[
                         'tab__item',
                         { active: selectIndex === index },
                     ]"
-                    :title="item.name">
+                    :id="indexToId(index)"
+                    :title="item.name"
+                    @click="doSelectTab(index)">
                     <div class="tab__item--status">●</div>
                     <div class="tab__item--name">
                         {{ item.name }}
@@ -37,8 +41,11 @@ on-close
         onMounted,
         PropType,
         reactive,
+        toRefs,
+        watch,
     } from 'vue'
     export default defineComponent({
+        emits: ['update:select-index'],
         props: {
             /* tab列表 */
             columns: {
@@ -50,13 +57,23 @@ on-close
                 type: Number,
                 default: 0,
             },
+            /* 模式(暂不支持) */
+            mode: {
+                type: String as PropType<
+                    'horizontal' | 'vertical'
+                >,
+                default: 'horizontal',
+            },
         },
 
         setup(props, context) {
-            const state = reactive({
-                wrapperRef: null,
-                boxRef: null,
+            const state = reactive<{
+                containerRef: HTMLElement | null
+            }>({
+                containerRef: null,
             })
+
+            // watch()
 
             onMounted(() => {
                 init()
@@ -67,13 +84,85 @@ on-close
                 // columns[selectIndex] &&
             }
 
-            function setSelectTab(selectIndex: number) {}
-
+            /**
+             * 手动切换
+             * @param selectIndex
+             */
+            function doSelectTab(selectIndex: number) {
+                setSelectTab(selectIndex)
+            }
+            /**
+             * 设置选中项
+             * @param selectIndex
+             */
+            function setSelectTab(selectIndex: number) {
+                scrollIntoView(selectIndex)
+                // 更新选中项
+                context.emit(
+                    'update:select-index',
+                    selectIndex,
+                )
+            }
+            /**
+             * 滚动可是区域
+             * @param selectIndex
+             */
             function scrollIntoView(selectIndex: number) {
-                let { wrapperRef, boxRef } = state
+                let { containerRef } = state,
+                    { columns } = props,
+                    { width: tabsWidth } =
+                        containerRef!.getBoundingClientRect(),
+                    { left: boxLeft } =
+                        indexToNode(
+                            0,
+                        )!.getBoundingClientRect(),
+                    { right: boxRight } = indexToNode(
+                        columns.length - 1,
+                    )!.getBoundingClientRect(),
+                    boxWidth = boxRight - boxLeft,
+                    { width: itemWidth, left: itemLeft } =
+                        indexToNode(
+                            selectIndex,
+                        )!.getBoundingClientRect(),
+                    itemRelativeLeft = itemLeft - boxLeft,
+                    left = 0
+
+                // 滑动条件
+                if (boxWidth > tabsWidth) {
+                    left =
+                        itemRelativeLeft -
+                        (tabsWidth - itemWidth) / 2
+                }
+                // 更新滑动
+                containerRef?.scroll({
+                    left,
+                    behavior: 'smooth',
+                })
             }
 
-            return {}
+            /**
+             * 索引获取dom节点
+             * @param tabIndex
+             */
+            function indexToNode(tabIndex: number) {
+                return document.getElementById(
+                    indexToId(tabIndex),
+                )
+            }
+            /**
+             * 索引转换成id
+             * @param index
+             */
+            function indexToId(index: number) {
+                return `t_${index}`
+            }
+
+            return {
+                ...toRefs(state),
+
+                indexToId,
+                doSelectTab,
+            }
         },
     })
 </script>
@@ -94,6 +183,14 @@ on-close
 
         /* 测试 */
         box-shadow: 1px 2px 6px rgba(0, 0, 0, 0.2);
+
+        &.vertical {
+            flex-direction: column;
+
+            .vui-tabs__container {
+                flex-direction: column;
+            }
+        }
 
         /* tab容器 */
         &__container {
