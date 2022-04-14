@@ -365,9 +365,11 @@ on-close
                     }
                 }
 
-                &:hover,
-                &.active {
+                &:hover {
                     background: #f5f5f5;
+                }
+                &.active {
+                    background: #5ddcfc;
                 }
             }
         }
