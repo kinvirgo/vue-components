@@ -17,6 +17,10 @@ const routes: Array<RouteRecordRaw> = [
     path: '/alpha',
     component: getComponent('alpha'),
   },
+  {
+    path: '/css',
+    component: getComponent('css'),
+  },
 ]
 
 export default createRouter({
