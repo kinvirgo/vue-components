@@ -5,7 +5,8 @@
             v-model:select-index="selectIndex" /> -->
         <scroll-tab-alpha
             v-model:columns="tabs"
-            v-model:select-index="selectIndex" />
+            v-model:select-index="selectIndex"
+            @on-change="onChange" />
     </div>
     <div class="tab-wrapper__action">
         <button @click="doAdd">添加</button>
@@ -29,7 +30,7 @@
                         name: 'tab-' + index,
                     })),
                 /* 选择中 */
-                selectIndex: 0,
+                selectIndex: 80,
             })
 
             function doAdd() {
@@ -42,6 +43,10 @@
                 state.tabs.shift()
             }
 
+            function onChange(item, index) {
+                console.log(item, index)
+            }
+
             return {
                 /* state */
                 ...toRefs(state),
@@ -49,6 +54,7 @@
                 /* event */
                 doAdd,
                 doSub,
+                onChange,
             }
         },
     })

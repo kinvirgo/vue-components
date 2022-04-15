@@ -17,7 +17,11 @@
                     <div class="tab__item--name">
                         {{ item.name }}
                     </div>
-                    <div class="tab__item--close">✕</div>
+                    <div
+                        class="tab__item--close"
+                        @click.stop="doCloseTab(index)">
+                        ✕
+                    </div>
                 </div>
             </template>
         </section>
@@ -67,11 +71,6 @@
         [key: string]: any
     }
 
-    /*
-on-change
-on-close
-*/
-
     import {
         defineComponent,
         onMounted,
@@ -81,7 +80,11 @@ on-close
         watch,
     } from 'vue'
     export default defineComponent({
-        emits: ['update:select-index'],
+        emits: [
+            'update:select-index',
+            'on-change',
+            'on-close',
+        ],
         props: {
             /* tab列表 */
             columns: {
@@ -110,8 +113,10 @@ on-close
         setup(props, context) {
             const state = reactive<{
                 containerRef: HTMLElement | null
+                inited: boolean
             }>({
                 containerRef: null,
+                inited: false,
             })
             /**
              * 监听选择项
@@ -125,14 +130,8 @@ on-close
             )
 
             onMounted(() => {
-                init()
+                doLocation()
             })
-
-            function init() {
-                let { columns, selectIndex } = props
-                columns[selectIndex] &&
-                    setSelectIndex(selectIndex)
-            }
 
             /**
              * 手动切换
@@ -147,9 +146,16 @@ on-close
              * @param selectIndex
              */
             function setSelectIndex(selectIndex: number) {
+                let { columns } = props
                 // 更新选中项
                 context.emit(
                     'update:select-index',
+                    selectIndex,
+                )
+                // on-change
+                context.emit(
+                    'on-change',
+                    { ...columns[selectIndex] },
                     selectIndex,
                 )
             }
@@ -258,7 +264,10 @@ on-close
              */
             function checkSelectIndex() {
                 let { selectIndex, columns } = props
-                return selectIndex < columns.length
+                return (
+                    0 <= selectIndex &&
+                    selectIndex < columns.length
+                )
             }
 
             function onMouseWheel({ deltaY }: WheelEvent) {
@@ -266,6 +275,19 @@ on-close
                 deltaY > 0
                     ? doNext(wheelVector)
                     : doPrev(wheelVector)
+            }
+
+            /**
+             * 关闭tab
+             * @param index
+             */
+            function doCloseTab(index: number) {
+                let { columns } = props
+                context.emit(
+                    'on-close',
+                    { ...columns[index] },
+                    index,
+                )
             }
 
             return {
@@ -276,6 +298,7 @@ on-close
                 doPrev,
                 doNext,
                 doLocation,
+                doCloseTab,
                 onMouseWheel,
             }
         },
@@ -368,6 +391,7 @@ on-close
                 &:hover {
                     background: #f5f5f5;
                 }
+
                 &.active {
                     background: #5ddcfc;
                 }
